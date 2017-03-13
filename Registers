@@ -12,7 +12,7 @@ entity registers is
     write_reg	: in std_logic_vector(4 downto 0);
     write_data	: in std_logic_vector(31 downto 0);
     data_reg_1	: out std_logic_vector(31 downto 0);
-    data_reg_2	: out std_logic_vector(31 downto 0);
+    data_reg_2	: out std_logic_vector(31 downto 0)
 
 	);
 end registers;
