@@ -22,10 +22,10 @@ end registers;
 ARCHITECTURE behavior OF registers IS
 
     type reg_type is array(31 downto 0) OF std_logic_vector(31 downto 0);
-    SIGNAL reg_s: reg_type;
+    signal reg_s: reg_type;
 	
 BEGIN
-  registers_process : PROCESS(clk, reset) IS
+  registers_process : process(clk, reset) IS
    begin
       if reset = '0' then
         for i in 0 to 31 loop
