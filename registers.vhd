@@ -5,7 +5,9 @@ USE ieee.numeric_std.all;
 entity registers is
 
 	port(
-   
+		
+    reset       : in std logic;		
+    clk         : in std_logic;
     regwrite	: in std_logic;
     reg_1	: in std_logic_vector(4 downto 0);
     reg_2	: in std_logic_vector(4 downto 0);
@@ -18,19 +20,27 @@ entity registers is
 end registers;
 
 ARCHITECTURE behavior OF registers IS
-  signal reg_write : STD_LOGIC;
-  signal IR6_10, IR11_15, IR_WB : STD_LOGIC_VECTOR(4 downto 0);
-  signal result_data, data_1, data_2 : STD_LOGIC_VECTOR(31 downto 0);
+
+    type reg_type is array(31 downto 0) OF std_logic_vector(31 downto 0);
+    SIGNAL reg_s: reg_type;
+	
 BEGIN
-  registers_process : PROCESS(reg_1, reg_2, write_reg, write_data, regwrite) IS
-	BEGIN
-      reg_write <= regwrite;
-      IR6_10 <= reg_1;
-      IR11_15 <= reg_2;
-      IR_WB <= write_reg;
-      result_data <= write_data;
-	END PROCESS;
-	data_reg_1 <= data_1;
-	data_reg_2 <= data_2;
+  registers_process : PROCESS(clk, reset) IS
+   begin
+      if reset = '0' then
+        for i in 0 to 31 loop
+          reg_s(i) <= (others => '0'); 
+        end loop;
+      elsif rising_edge(clk) then
+        if regwrite = '1' then
+          if to_integer(unsigned(write_reg)) /= 0 then  
+            reg_s(to_integer(unsigned(write_reg))) <= write_data;
+          end if;
+        end if;
+      end if;
+    end process ;
+    data_reg_1 <= reg_s(to_integer(unsigned(reg_1)));
+    data_reg_2 <= register_signal(to_integer(unsigned(reg_2)));
+	
 END behavior;
 	
