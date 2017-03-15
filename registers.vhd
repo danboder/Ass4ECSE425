@@ -4,9 +4,9 @@ USE ieee.numeric_std.all;
 
 entity registers is
 
-	port(
+   port(
 		
-    reset       : in std logic;		
+    reset       : in std_logic;		
     clk         : in std_logic;
     regwrite	: in std_logic;
     reg_1	: in std_logic_vector(4 downto 0);
@@ -26,6 +26,7 @@ ARCHITECTURE behavior OF registers IS
 	
 BEGIN
   registers_process : process(clk, reset) IS
+   
    begin
       if reset = '0' then
         for i in 0 to 31 loop
@@ -39,8 +40,8 @@ BEGIN
         end if;
       end if;
     end process ;
+   
     data_reg_1 <= reg_s(to_integer(unsigned(reg_1)));
     data_reg_2 <= reg_s(to_integer(unsigned(reg_2)));
 	
 END behavior;
-	
