@@ -40,7 +40,7 @@ BEGIN
       end if;
     end process ;
     data_reg_1 <= reg_s(to_integer(unsigned(reg_1)));
-    data_reg_2 <= register_signal(to_integer(unsigned(reg_2)));
+    data_reg_2 <= reg_s(to_integer(unsigned(reg_2)));
 	
 END behavior;
 	
