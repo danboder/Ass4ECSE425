@@ -28,7 +28,7 @@ BEGIN
   registers_process : process(clk, reset) IS
    
    begin
-      if reset = '0' then
+      if reset = '1' then
         for i in 0 to 31 loop
           reg_s(i) <= (others => '0'); 
         end loop;
