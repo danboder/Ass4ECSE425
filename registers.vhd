@@ -33,11 +33,10 @@ BEGIN
           reg_s(i) <= (others => '0'); 
         end loop;
       elsif rising_edge(clk) then
-        if regwrite = '1' then
-          if to_integer(unsigned(write_reg)) /= 0 then  
+        if regwrite = '1' then  
             reg_s(to_integer(unsigned(write_reg))) <= write_data;
-          end if;
         end if;
+	    regs_s(0) <= (others => '0');
       end if;
     end process ;
    
