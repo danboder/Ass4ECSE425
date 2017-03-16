@@ -20,7 +20,7 @@ BEGIN
 		variable char : character:='0'; 
    begin
 		--Open the file write.txt from the specified location for writing(WRITE_MODE).
-      file_open(file_pointer,"C:\write.txt",WRITE_MODE);	  
+      file_open(file_pointer,"write.txt",WRITE_MODE);	  
 		--We want to store binary values from 0000 to 1111 in the file.
       for i in 0 to 15 loop	
 		bin_value := conv_std_logic_vector(i,4);
