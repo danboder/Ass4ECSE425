@@ -2,8 +2,9 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
+USE STD.textio.all;
 
-ENTITY memory IS
+ENTITY memoryData IS
 	GENERIC(
 		ram_size : INTEGER := 8192;
 		mem_delay : time := 1 ns;
@@ -16,11 +17,12 @@ ENTITY memory IS
 		memwrite: IN STD_LOGIC;
 		memread: IN STD_LOGIC;
 		readdata: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+		done: IN STD_LOGIC;
 		waitrequest: OUT STD_LOGIC
 	);
-END memory;
+END memoryData;
 
-ARCHITECTURE rtl OF memory IS
+ARCHITECTURE rtl OF memoryData IS
 	TYPE MEM IS ARRAY(ram_size-1 downto 0) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
 	SIGNAL ram_block: MEM;
 	SIGNAL read_address_reg: INTEGER RANGE 0 to ram_size-1;
@@ -44,6 +46,11 @@ BEGIN
 			END IF;
 		read_address_reg <= address;
 		END IF;
+
+		--report "B value is" & std_logic'image(done);
+
+
+
 	END PROCESS;
 	readdata <= ram_block(read_address_reg);
 
@@ -65,5 +72,38 @@ BEGIN
 		END IF;
 	END PROCESS;
 	waitrequest <= write_waitreq_reg and read_waitreq_reg;
+
+
+
+	export: process (clock)
+		file file_pointer : text;
+        	variable line_content : string(1 to 32);
+        	variable current_value  : std_logic_vector(31 downto 0);
+        	variable line_num : line;
+       		variable i : integer := 0;
+			--variable temp : STD_LOGIC;
+	begin
+	--temp := done;
+	if (done = '1') then -- export datamemory to memory.txt
+		file_open(file_pointer, "memory.txt", write_mode);
+		for i in 0 to 8191 loop
+			current_value := ram_block(i);
+			for x in 0 to 31 loop
+				if(current_value(x) = '0') then
+					line_content(32-x) := '0';
+				else
+					line_content(32-x) := '1';
+				end if;
+			end loop;
+			--REPORT "hehe";
+			write(line_num, line_content);
+			writeline(file_pointer, line_num);
+			--wait for 1* ns;
+
+		end loop;
+		file_close(file_pointer);
+		--wait;
+	end if;
+	end process;
 
 END rtl;
