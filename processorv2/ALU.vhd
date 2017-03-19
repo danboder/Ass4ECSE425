@@ -34,7 +34,11 @@ BEGIN
 				end loop;
 			when 1 => --ADD
 				result <= (s_data + t_data);
+				--report "S value is" & integer'image(to_integer(unsigned(t_data)));
 			when 15 => --ADDI
+				--report "ADDI";
+				--report "S value is" & integer'image(to_integer(unsigned(s_data)));
+				--report "T value is" & integer'image(to_integer(unsigned(t_data)));
 				result <= (s_data + t_data);
 			when 22 => --LW
 				result <= (s_data + t_data);

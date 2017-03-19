@@ -14,6 +14,7 @@ ARCHITECTURE behavior OF Sign_extend IS
 BEGIN
 	ext_process : PROCESS(Imm_in) IS
 	BEGIN
+		--report "Sign extend value is" & integer'image(to_integer(unsigned(Imm_in)));
 		MSB <= Imm_in(15);
 		if MSB = '0' then
 			sign_ext <= ("0000000000000000" & Imm_in);

@@ -55,11 +55,17 @@ BEGIN
 	process (clk)
 	begin
 		if clk = '1' then
-		memread <= '1';
-		instruction <= readdata;
-		PC_value <= PC_value + 1;
-		count <= std_logic_vector(to_unsigned(PC_value + 1,32));
+			memread <= '1';
+			instruction <= readdata;
+			PC_value <= PC_value + 1;
+			count <= std_logic_vector(to_unsigned(PC_value + 1,32));
 		end if;
+		if clk = '0' then
+			memread <= '0';
+		end if;
+    
+    --report "INST value is" & integer'image(to_integer(unsigned(readdata)));
+
 	end process;
 	
 	

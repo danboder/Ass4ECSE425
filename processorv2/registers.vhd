@@ -32,7 +32,7 @@ BEGIN
    begin
       if reset = '1' then
         for i in 0 to 31 loop
-          reg_s(i) <= (others => '0'); 
+          reg_s(i) <= (others => '1'); 
         end loop;
       elsif rising_edge(clk) then
         if regwrite = '1' then  
