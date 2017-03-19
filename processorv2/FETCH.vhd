@@ -57,8 +57,11 @@ BEGIN
 		if clk = '1' then
 			memread <= '1';
 			instruction <= readdata;
-			PC_value <= PC_value + 1;
-			count <= std_logic_vector(to_unsigned(PC_value + 1,32));
+			if PC_value < 8190 then
+				PC_value <= PC_value + 1;
+				count <= std_logic_vector(to_unsigned(PC_value + 1,32));
+			end if;
+			
 		end if;
 		if clk = '0' then
 			memread <= '0';
