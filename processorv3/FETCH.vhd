@@ -53,19 +53,28 @@ BEGIN
                 );
 	
 	process (clk)
+	variable stall : INTEGER := 0;
 	begin
-		if clk = '1' then
-			memread <= '1';
-			instruction <= readdata;
-			if PC_value < 8190 then
-				PC_value <= PC_value + 1;
-				count <= std_logic_vector(to_unsigned(PC_value + 1,32));
-			end if;
+		if stall = 0 then
+			if clk = '1' then
+				memread <= '1';
+				instruction <= readdata;
+				if PC_value < 8190 then
+					PC_value <= PC_value + 1;
+					count <= std_logic_vector(to_unsigned(PC_value + 1,32));
+					stall := 8;
+				end if;
 			
-		end if;
-		if clk = '0' then
-			memread <= '0';
-		end if;
+			end if;
+			if clk = '0' then
+				memread <= '0';
+			end if;
+	end if;
+
+	if stall > 0 then
+		instruction <= "00000000000000000000000000000000";
+		stall := stall - 1;
+	end if;
     
     --report "INST value is" & integer'image(to_integer(unsigned(readdata)));
 
