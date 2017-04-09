@@ -27,6 +27,7 @@ vcom registers.vhd
 vcom adder.vhd
 vcom wb_control.vhd
 vcom pipelined_processor.vhd
+vcom branch_predictor.vhd
 
 vsim pipelined_processor_tb
 
