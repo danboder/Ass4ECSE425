@@ -32,7 +32,7 @@ BEGIN
 			s_temp <= s_in;
 			write_addr_temp <= write_addr_in;
 			if wb_temp = '0' then
-				report "wb_result is" & integer'image(to_integer(unsigned(DM_temp)));
+				--report "wb_result is" & integer'image(to_integer(unsigned(DM_temp)));
 			end if;
 		end if;
 	END PROCESS;

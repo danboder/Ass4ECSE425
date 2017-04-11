@@ -163,9 +163,9 @@ PROCESS(clk)
 BEGIN
 	if clk'event and clk = '1' then
 		if wb_w = '0' then
-			report "result_w is " & integer'image(to_integer(unsigned(result_w)));
-			report "wb_out is " & integer'image(to_integer(unsigned(wd_d)));
-			report "address is " & integer'image(to_integer(unsigned(dest_addr_d)));
+			--report "result_w is " & integer'image(to_integer(unsigned(result_w)));
+			--report "wb_out is " & integer'image(to_integer(unsigned(wd_d)));
+			--report "address is " & integer'image(to_integer(unsigned(dest_addr_d)));
 		end if;
 	end if;
 END PROCESS;
