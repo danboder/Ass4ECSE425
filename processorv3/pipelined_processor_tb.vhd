@@ -36,7 +36,7 @@ wait for clk_period;
 reset <= '0';
 enable <= '1';
 
-wait for 90 ns;
+wait for 990 ns;
 done <= '1';
 wait;
 END PROCESS;

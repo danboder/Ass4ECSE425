@@ -65,7 +65,7 @@ BEGIN
 				result <= (s_data + t_data);
 				--report "S value is" & integer'image(to_integer(unsigned(t_data)));
 			when 15 => --ADDI
-				--report "ADDI";
+				report "ADDI";
 				--report "S value is" & integer'image(to_integer(unsigned(s_data)));
 				--report "T value is" & integer'image(to_integer(unsigned(t_data)));
 				result <= (s_data + t_data);
@@ -82,7 +82,7 @@ BEGIN
 				--LO <= std_logic_vector(to_signed((s_temp/t_temp),32));
 				--HI_temp <= (s_temp mod t_temp);
 				--HI <= STD_LOGIC_VECTOR(to_unsigned(HI_temp,32));
-				report "LAST INSTRUCTION"
+				report "LAST INSTRUCTION";
 
 			when 4 => --JR
 				result <= s_data;

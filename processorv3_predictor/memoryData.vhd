@@ -41,12 +41,17 @@ BEGIN
 			END LOOP;
 		end if;
 
+
 		--This is the actual synthesizable SRAM block
 		IF (clock'event AND clock = '1') THEN
 			IF (memwrite = '1') THEN
-				ram_block(address) <= writedata;
+				IF (address < 8191) THEN
+					ram_block(address) <= writedata;
+				END IF;
 			END IF;
-		read_address_reg <= address;
+		IF (address < 8191) THEN
+			read_address_reg <= address;
+		END IF;
 		END IF;
 
 		--report "ADDR value is" & integer'image(address);

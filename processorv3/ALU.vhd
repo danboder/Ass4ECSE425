@@ -53,7 +53,7 @@ BEGIN
 				--LO <= std_logic_vector(to_signed((s_temp/t_temp),32));
 				--HI_temp <= (s_temp mod t_temp);
 				--HI <= STD_LOGIC_VECTOR(to_unsigned(HI_temp,32));
-				report "LAST INSTRUCTION"
+				--report "LAST INSTRUCTION";
 
 			when 4 => --JR
 				result <= s_data;
@@ -65,6 +65,7 @@ BEGIN
 				--LO <= (s_data*t_data);
 				--LO <= std_logic_vector(to_unsigned(signed(s_data) * signed(t_data),32));
 				LO <= std_logic_vector(to_signed((to_integer(signed(s_data))*to_integer(signed(t_data))),32));
+				--report "LAST INSTRUCTION";
 			when 8 => --OR
 				result <= (s_data OR t_data);
 			when 23 => --ORI
@@ -102,6 +103,7 @@ BEGIN
 			when 14 => --NOR
 				result <= not(s_data OR t_data);
 			when 17 => --BEQ
+				--report "BEQ";
 				if equal = '1' then
 					result <= t_data;
 				end if;
