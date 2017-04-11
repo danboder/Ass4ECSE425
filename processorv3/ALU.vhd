@@ -53,6 +53,8 @@ BEGIN
 				--LO <= std_logic_vector(to_signed((s_temp/t_temp),32));
 				--HI_temp <= (s_temp mod t_temp);
 				--HI <= STD_LOGIC_VECTOR(to_unsigned(HI_temp,32));
+				report "LAST INSTRUCTION"
+
 			when 4 => --JR
 				result <= s_data;
 			when 5 => --MFHI

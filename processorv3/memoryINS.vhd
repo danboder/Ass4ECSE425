@@ -35,7 +35,7 @@ BEGIN
       	variable line_num : line;
 		variable j : integer := 0;
 		variable char : character:='0';
-		variable bin_value : std_logic_vector(31 downto 0):=(others=>'0');
+		variable bin_value : std_logic_vector(31 downto 0):="00000000000000000000000000100000";
 		variable dest_address : integer:= 0;
 
 	BEGIN
