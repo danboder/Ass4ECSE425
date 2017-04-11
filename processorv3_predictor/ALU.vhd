@@ -10,7 +10,8 @@ ENTITY ALU IS
 	mode		: IN INTEGER;
 	shamt		: IN STD_LOGIC_VECTOR(4 downto 0);
 	jump_addr	: IN STD_LOGIC_VECTOR(25 downto 0);
-	final_result		: OUT STD_LOGIC_VECTOR(31 downto 0)
+	final_result		: OUT STD_LOGIC_VECTOR(31 downto 0);
+	predicted_outcome   : OUT STD_LOGIC
 	);
 END ALU;
 
@@ -20,7 +21,35 @@ ARCHITECTURE behavior OF ALU is
 	signal shamt_bit: INTEGER;
 	signal overflow : STD_LOGIC_VECTOR(32 downto 0);
 	signal result	: STD_LOGIC_VECTOR(31 downto 0);
+
+	COMPONENT predictor IS
+        PORT (
+		reset: in std_logic;
+		clk  : in std_logic;
+     		taken: in std_logic;
+     		predicted_outcome: out std_logic
+        );
+    END COMPONENT;
+
+	signal taken : STD_LOGIC;
+	signal reset : STD_LOGIC := '0';
+	signal clk : STD_LOGIC := '1';
+
+
+
+
 BEGIN
+
+ branch_predictor: predictor
+                PORT MAP(
+                    reset,
+                    clk,
+                    taken,
+                    predicted_outcome
+                );
+
+
+
 	compute_process : PROCESS(s_data, t_data, mode, equal, jump_addr)
 	
 	BEGIN
@@ -101,11 +130,21 @@ BEGIN
 				result <= not(s_data OR t_data);
 			when 17 => --BEQ
 				if equal = '1' then
+					taken <= '1';
+					predicted_outcome <= '1';
 					result <= t_data;
+				else
+					taken <= '0';
+					predicted_outcome <= '0';
 				end if;
 			when 18 => --BNE
 				if equal = '0' then
+					taken <= '1';
+					predicted_outcome <= '1';
 					result <= t_data;
+				else
+					taken <= '0';
+					predicted_outcome <= '0';
 				end if;
 	--		when 19 => --J
 	--			result <= ("000000" & jump_addr);
@@ -117,7 +156,13 @@ BEGIN
 				result <= (s_data + t_data);
 			when others =>
 		end case;
+
+		
+
 	end process;
+
+	--predicted_outcome <= '1';
+
 	final_result <= result;
 end behavior;
 

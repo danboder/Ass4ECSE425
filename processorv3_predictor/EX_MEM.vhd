@@ -5,6 +5,7 @@ USE ieee.numeric_std.all;
 ENTITY EX_MEM IS
 	PORT(
 		clk, equal,choose_in	: IN STD_LOGIC;
+		predicted_outcome : IN STD_LOGIC;
 		mode		: IN INTEGER;
 		result, t_in	: IN STD_LOGIC_VECTOR(31 downto 0);
 		d_addr		: IN STD_LOGIC_VECTOR(4 downto 0);

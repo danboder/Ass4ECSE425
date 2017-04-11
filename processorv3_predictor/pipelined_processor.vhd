@@ -67,13 +67,15 @@ ARCHITECTURE behavior OF pipelined_processor IS
 		equal				: OUT STD_LOGIC;
 		result, t_out			: OUT STD_LOGIC_VECTOR(31 downto 0);
 		wb_choose			: OUT STD_LOGIC;
-		dest_addr			: OUT STD_LOGIC_VECTOR(4 downto 0)
+		dest_addr			: OUT STD_LOGIC_VECTOR(4 downto 0);
+		predicted_outcome   : OUT STD_LOGIC
 	);
 	END COMPONENT;
 	-- THE REGISTER BETWEEN EXECUTE AND MEMORY STAGES, CONTAINS SOME LOGIC COMPONENTS FOR EVALUATING BRANCHES
 	COMPONENT EX_MEM IS
 	PORT(
 		clk, equal, choose_in	: IN STD_LOGIC;
+		predicted_outcome       : IN STD_LOGIC;
 		mode		: IN INTEGER;
 		result, t_in	: IN STD_LOGIC_VECTOR(31 downto 0);
 		d_addr		: IN STD_LOGIC_VECTOR(4 downto 0);
@@ -144,14 +146,15 @@ ARCHITECTURE behavior OF pipelined_processor IS
 	--all outputs of MEM have __M appended
 	SIGNAL wb_w : STD_LOGIC := '0';
 	SIGNAL result_w, s_w : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+	SIGNAL predicted_outcome : STD_LOGIC := '1';
 	--all inputs of WB appended _w
 BEGIN
 	I_F : FETCH PORT MAP(clk, enable, reset, if_branch, branch_addr, PC_F, INSTR_F);
 	FD_reg : IF_ID PORT MAP(clk, PC_F, INSTR_F, PC_d, INSTR_d);
 	DECODE : ID PORT MAP(if_write, reset, clk, done, PC_d, INSTR_d, wd_d, dest_addr_d, count_D, s_D, t_D, sign_D, zero_D, j_addr_D, op_D, funct_D, d_addr_D, t_addr_D, shamt_D);
 	DE_reg : ID_EX PORT MAP(clk, count_D, s_D, t_D, sign_D, zero_D, op_D, funct_D, shamt_D, t_addr_D, d_addr_D, j_addr_D, count_e, s_e, t_e, sign_e, zero_e, op_e, funct_e, shamt_e, t_addr_e, d_addr_e, j_addr_e);
-	EXEC : EX PORT MAP(count_e, s_e, t_e, sign_e, zero_e, op_e, funct_e, shamt_e, t_addr_e, d_addr_e, j_addr_e, mode_E, equal_E, result_E, t_out_E, wb_choose_E, dest_addr_E);
-	EM_reg : EX_MEM PORT MAP(clk, equal_E, wb_choose_E, mode_E, result_E, t_out_E, dest_addr_E, b_m, wr_m, wm_m, wb_m, il_m, r_data_m, t_out_m, d_addr_m);
+	EXEC : EX PORT MAP(count_e, s_e, t_e, sign_e, zero_e, op_e, funct_e, shamt_e, t_addr_e, d_addr_e, j_addr_e, mode_E, equal_E, result_E, t_out_E, wb_choose_E, dest_addr_E, predicted_outcome);
+	EM_reg : EX_MEM PORT MAP(clk, equal_E, wb_choose_E, predicted_outcome, mode_E, result_E, t_out_E, dest_addr_E, b_m, wr_m, wm_m, wb_m, il_m, r_data_m, t_out_m, d_addr_m);
 	DataMEM : MEM PORT MAP(clk, done, b_m, wb_m, wr_m, wm_m, il_m, r_data_m, t_out_m, d_addr_m, if_branch, wb_MEM, wr_MEM, branch_addr, result_MEM, s_MEM, dest_addr_MEM);
 	MW_reg : MEM_WB PORT MAP(clk, wb_MEM, wr_MEM, result_MEM, s_MEM, dest_addr_MEM, wb_w, if_write, result_w, s_w, dest_addr_d);
 	WB : mux_2 PORT MAP(wb_w, result_w, s_w, wd_d);

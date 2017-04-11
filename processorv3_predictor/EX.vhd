@@ -12,7 +12,8 @@ ENTITY EX IS
 		equal				: OUT STD_LOGIC;
 		result, t_out			: OUT STD_LOGIC_VECTOR(31 downto 0);
 		wb_choose			: OUT STD_LOGIC;
-		dest_addr			: OUT STD_LOGIC_VECTOR(4 downto 0)
+		dest_addr			: OUT STD_LOGIC_VECTOR(4 downto 0);
+		predicted_outcome   : OUT STD_LOGIC
 	);
 END EX;
 
@@ -33,7 +34,8 @@ COMPONENT ALU IS
 	mode		: IN INTEGER;
 	shamt		: IN STD_LOGIC_VECTOR(4 downto 0);
 	jump_addr	: IN STD_LOGIC_VECTOR(25 downto 0);
-	final_result		: OUT STD_LOGIC_VECTOR(31 downto 0)
+	final_result		: OUT STD_LOGIC_VECTOR(31 downto 0);
+	predicted_outcome   : OUT STD_LOGIC
 	);
 END COMPONENT;
 -- CHOOSES (BASED ON MODE) THE CORRECT DESTINATION ADDRESS FOR THE FINAL RESULT
@@ -86,6 +88,7 @@ END COMPONENT;
 	SIGNAL choose1, choose2, eq_temp	: STD_LOGIC := '0';
 	SIGNAL s_temp, t_temp, imm_temp		: STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
 	SIGNAL mode_temp			: INTEGER := 0;
+	--signal predicted_outcome : STD_LOGIC;
 BEGIN
 	CTL : ALU_control PORT MAP (op, funct, choose1, choose2, mode_temp);
 	CMP : comparator_32 PORT MAP (s_data, t_data, eq_temp);
@@ -93,7 +96,7 @@ BEGIN
 	ADD : addr_mux PORT MAP (mode_temp, t_addr, d_addr, dest_addr);
 	M1 : mux_2 PORT MAP(choose1, s_data, PC, s_temp);
 	M2 : mux_2 PORT MAP(choose2, t_data, imm_temp, t_temp);
-	A1 : ALU PORT MAP (s_temp, t_temp, eq_temp, mode_temp, shamt, j_addr, result);
+	A1 : ALU PORT MAP (s_temp, t_temp, eq_temp, mode_temp, shamt, j_addr, result, predicted_outcome);
 	WBC : wb_control PORT MAP(mode_temp, wb_choose);
 	t_out <= t_data;
 	equal <= eq_temp;

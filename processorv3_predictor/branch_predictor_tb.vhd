@@ -51,6 +51,10 @@ BEGIN
 	taken <= '1';
 	wait for 1 * clk_period;
 	taken <= '1';
+    wait for 1 * clk_period;
+    taken <= '0';
+    wait for 1 * clk_period;
+    taken <= '0';
 	
 	--report "output" & std_logic'image(predicted_outcome);
 	
