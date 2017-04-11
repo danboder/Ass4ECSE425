@@ -17,10 +17,13 @@ entity predictor is
 end predictor;
 
 architecture behaviour of predictor is
+	TYPE states is (s00,s01,s10,s11);
+    signal current_s,next_s: states;
+	signal state   : states;
 
-    signal branch_state: std_logic_vector(1 downto 0);
-    signal next_state: std_logic_vector(1 downto 0);
-    signal predicted_result : std_logic;
+	
+	-- 00, 01, 10, 11
+    --signal predicted_result : std_logic;
 	
  begin
 
@@ -29,54 +32,59 @@ architecture behaviour of predictor is
   begin
   
      if reset = '1' then
-        branch_state <= "00";
+        current_s <= s00;
      elsif (clk'event and clk = '1') then
-        branch_state <= next_state;
+        current_s <= next_s;
      end if;
     
    end process;
 
- process (branch_state, taken)
+ process (current_s, taken)
 
  	begin
 			
-		case branch_state is
+		case current_s is
         
-					when "00" =>
+					when s00 =>
+						predicted_outcome <= '0';
           
 						if (taken = '1') then
-							next_state <= "01";
-                                             predicted_result <= '0';
-						end if;
-            
-					when "01" =>
-          
-						if (taken = '1') then
-							next_state <= "11";
-                                             predicted_result <= '1';
+							next_s <= s01;
 						else
-							next_state <= "00";
-                                             predicted_result <= '0';
+							next_s <= s00;
 						end if;
             
-					when "10" =>
+					when s01 =>
+						predicted_outcome <= '0';
           
 						if (taken = '1') then
-							next_state <= "11";
-                                             predicted_result <= '1';
+							next_s <= s11;
+                                             
 						else
-							next_state <= "00";
-                                             predicted_result <= '0';
+							next_s <= s00;
 						end if;
             
-					when "11" =>
+					when s10 =>
+						predicted_outcome <= '1';
           
+						if (taken = '1') then
+							next_s <= s11;
+                                             
+						else
+							next_s <= s00;
+						end if;
+            
+					when s11 =>
+						predicted_outcome <= '1';
+
 						if (taken = '0') then
-							next_state <= "10";
-                                            predicted_result <= '1';
+							next_s <= s10;
+                        else
+							next_s <= s11;
 						end if;			
             
-					when others =>
+					
+				
           
 				end case;
             
