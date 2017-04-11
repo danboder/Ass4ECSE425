@@ -131,20 +131,20 @@ BEGIN
 			when 17 => --BEQ
 				if equal = '1' then
 					taken <= '1';
-					predicted_outcome <= '1';
+					
 					result <= t_data;
 				else
 					taken <= '0';
-					predicted_outcome <= '0';
+					
 				end if;
 			when 18 => --BNE
 				if equal = '0' then
 					taken <= '1';
-					predicted_outcome <= '1';
+					
 					result <= t_data;
 				else
 					taken <= '0';
-					predicted_outcome <= '0';
+					
 				end if;
 	--		when 19 => --J
 	--			result <= ("000000" & jump_addr);
